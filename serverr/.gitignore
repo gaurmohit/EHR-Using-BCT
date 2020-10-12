@@ -1,0 +1,5 @@
+/env.py
+/.vscode
+/__pycache__
+/publish.ps1
+/db.sqlite3

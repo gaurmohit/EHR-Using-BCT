@@ -1,0 +1,46 @@
+trigger:
+    - master
+
+pool:
+    vmImage: 'ubuntu-latest'
+
+steps:
+    - script: echo Hello, world!
+      displayName: 'Run a one-line script'
+    - script: |
+          echo Add other tasks to build, test, and deploy your project.
+          echo See https://aka.ms/yaml
+      displayName: 'Run a multi-line script'
+
+    - task: SSH@0
+      inputs:
+          sshEndpoint: 'hbook-server-azure'
+          runOptions: 'inline'
+          inline: |
+              cd ho.hbook.in/server
+              rm -r ./public/
+          readyTimeout: '20000'
+
+    - task: CopyFilesOverSSH@0
+      inputs:
+          sshEndpoint: 'hbook-server-azure'
+          sourceFolder: './'
+          contents: |
+              **
+              !.git/**
+              !__pycache__
+          targetFolder: '~/ho.hbook.in/server'
+          readyTimeout: '20000'
+
+    - task: SSH@0
+      inputs:
+          sshEndpoint: 'hbook-server-azure'
+          runOptions: 'inline'
+          inline: |
+              source ~/pyenv/ho.hbook.in/bin/activate
+              cd ho.hbook.in/server
+              pip install -r requirements.txt
+              python manage.py collectstatic --noinput
+              python manage.py migrate
+              pm2 restart ho-server
+          readyTimeout: '20000'
