@@ -1,0 +1,147 @@
+<mat-toolbar color="accent">
+  <mat-toolbar-row>
+    <span>{{ UserId }}</span>
+    <div class="flex-item"></div>
+    <a routerLink="/home">Back</a>
+  </mat-toolbar-row>
+</mat-toolbar>
+<mat-accordion>
+  <mat-expansion-panel style="background-color: #0093;" [expanded]="true">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Update Details (Create New Blocks)
+      </mat-panel-title>
+      <mat-panel-description>
+        Type your name and age
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-form-field>
+      <mat-label>Gender</mat-label>
+      <mat-select [(ngModel)]="Gender" name="food">
+        <mat-option *ngFor="let gender of ['Male', 'Female']" [value]="gender">
+          {{ gender }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Years In Native Country</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Years_in_US" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Maritial Status</mat-label>
+      <mat-select [(ngModel)]="Maritial_Status">
+        <mat-option
+          *ngFor="
+            let status of [
+              { status: 'Married', val: 1 },
+              { status: 'Un - Married', val: 2 }
+            ]
+          "
+          [value]="status.val"
+        >
+          {{ status.status }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>No of family members</mat-label>
+      <input matInput type="number" min="1" [(ngModel)]="People_Family" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>No if household members</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="People_Household" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Family monthly income in thousands</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Family_income" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Household monthly income in thousands</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Household_Income" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>GlycoHemoglobin</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="GlycoHemoglobin" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>ArmCircum</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="ArmCircum" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>SaggitalAbdominal</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="SaggitalAbdominal" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>GripStrength</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="GripStrength" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Breast_fed</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Breast_fed" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Taking_Insulin</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Taking_Insulin" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Taking_Oral_Agents</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Taking_Oral_Agents" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Eyes_Affected</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Eyes_Affected" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Recent_BP</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Recent_BP" />
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Diabetes</mat-label>
+      <input matInput type="number" min="0" [(ngModel)]="Diabetes" />
+    </mat-form-field>
+    <mat-divider [vertical]="false" [inset]="false"></mat-divider>
+    <!-- 'mat-button','mat-raised-button', 'mat-flat-button','mat-stroked-button','mat-icon-button','mat-fab','mat-mini-fab' -->
+    <div class="flex-row">
+      <div class="flex-item"></div>
+      <button mat-raised-button color="warn">Reset</button>
+      <button mat-raised-button color="primary" (click)="update()">
+        Update
+      </button>
+    </div>
+  </mat-expansion-panel>
+
+  <ng-container *ngFor="let block of this.chain.data">
+    <mat-expansion-panel
+      [ngClass]="{ verified: block.verified, unverified: !block.verified }"
+    >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          {{ block.data.id }}
+        </mat-panel-title>
+        <mat-panel-description
+          >Block created on
+          {{ block.data.created_on | date: "medium" }}</mat-panel-description
+        >
+      </mat-expansion-panel-header>
+      <ng-container *ngFor="let key of keys(block.data)">
+        <mat-card
+          class="w3-col s3 m2 l1"
+          *ngIf="
+            ![
+              'created_on',
+              'previous_hash',
+              'my_hash',
+              'UserId',
+              'id'
+            ].includes(key)
+          "
+          style="overflow: hidden; margin: 5px;"
+        >
+          <h6>{{ key }}</h6>
+          <p>{{ s(block.data[key]) | slice: 0:10 }}</p>
+        </mat-card>
+      </ng-container>
+    </mat-expansion-panel>
+  </ng-container>
+</mat-accordion>

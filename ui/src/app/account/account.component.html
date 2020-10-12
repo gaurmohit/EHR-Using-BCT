@@ -1,0 +1,117 @@
+<div class="w3-container">
+  <div class="w3-row">
+    <div class="w3-col s12 m6 l6">
+      <app-download></app-download>
+    </div>
+    <div class="w3-col s12 m6 l6">
+      <mat-card style="margin: 5px;">
+        <mat-card-content
+          class="flex-item"
+          style="max-height: 90vh; overflow: auto;"
+        >
+          <mat-card-title>Select User</mat-card-title>
+          <mat-card-subtitle *ngIf="individual_status != 0">
+            <div *ngIf="individual_status == 3">
+              Finding data
+            </div>
+            <div *ngIf="individual_status == 2">
+              Processing
+            </div>
+            <div *ngIf="individual_status == 1">
+              Finished Data Processing, downloading file
+            </div>
+          </mat-card-subtitle>
+          <div class="flex-row">
+            <mat-form-field class="flex-item">
+              <mat-label>Filter</mat-label>
+              <input
+                matInput
+                (keyup)="applyFilter($event)"
+                placeholder="Ex. ium"
+              />
+            </mat-form-field>
+            <div>
+              <button
+                mat-raised-button
+                color="primary"
+                (click)="createAccount()"
+              >
+                <i class="fas fa-plus"></i> Create User
+              </button>
+            </div>
+          </div>
+
+          <table
+            mat-table
+            [dataSource]="dataSource"
+            style="width: 100%; height: 100%;"
+            matSort
+          >
+            <!--- Note that these columns can be defined in any order.
+                  The actual rendered columns are set as a property on the row definition" -->
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="id">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+              <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="UserId">
+              <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                User Key
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.UserId }}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element">
+                <button
+                  mat-button
+                  color="primary"
+                  [routerLink]="['/profile', element.UserId]"
+                >
+                  <i class="fas fa-user-alt"></i>
+                  Profile
+                </button>
+                <button
+                  mat-button
+                  color="accent"
+                  (click)="download_user_data(element.UserId, 'k')"
+                >
+                  <i class="fas fa-download"></i> K
+                </button>
+                <button
+                  mat-button
+                  color="accent"
+                  (click)="download_user_data(element.UserId, 'l')"
+                >
+                  <i class="fas fa-download"></i> L
+                </button>
+
+                <button
+                  mat-button
+                  color="accent"
+                  (click)="download_user_data(element.UserId, 't')"
+                >
+                  <i class="fas fa-download"></i> T
+                </button>
+              </td>
+            </ng-container>
+
+            <tr
+              mat-header-row
+              *matHeaderRowDef="displayedColumns; sticky: true"
+            ></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+          </table>
+          <mat-paginator
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons
+          ></mat-paginator>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
